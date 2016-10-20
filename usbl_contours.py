@@ -15,6 +15,8 @@ def Cusbl(x,y,xb,yb):
     C[1,1] = dx/(r**2)
     return C
 
+
+
 X,Y = (100.0,100.0)
 Nx, Ny = (100,100)
 xx = linspace(0,X,Nx)
