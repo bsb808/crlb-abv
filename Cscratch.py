@@ -1,28 +1,41 @@
     
 
 # Build C matrix for multiple measurements
+
+# Position
 x = 10
 y = 0
 xb = 0
 yb = 0
 
-TT = linspace(1,50,50)
+# Parameters
+TT = linspace(1,50,50) # Time window for observations
+# USBL
+dtUsbl = 1.0
+varr = (1.0)**2  # USBL range variance
+vara = (1*pi/180.0)**2  # USBL angle variance
+varv = (0.01)**2   # velocity variance
+vel = 1  # vehicle velocity
+varhdg = (10*pi/180.0)**2  # heading variance
+# 
+
 CRx = []
 CRy = []
 tsig = []
 Cep = []
 #TT = [2.0]
 for II in range(len(TT)):
-# How many USBL measurmeents
+    
     T = TT[II] #1.0  #s
-    dtUsbl = 1.0
+    # How many USBL measurmeents
+
     NUsbl = int(floor(T/dtUsbl))
 
     # How many DVL measurements
     dtDvl = 0.1
     NDvl = int(floor(T/dtDvl))
 
-    # Range measurements
+    # USBL Range measurements
     Cr = zeros((NUsbl,2*NUsbl))
     r = sqrt((x-xb)**2+(y-yb)**2)
     dy = y-yb
@@ -30,14 +43,12 @@ for II in range(len(TT)):
     for ii in range(NUsbl):
         Cr[ii,ii*2] = dx/r
         Cr[ii,ii*2+1] = dy/r
-    varr = (1.0)**2
 
-    # Angle
+    # USBL Angle
     Ca = zeros((NUsbl,2*NUsbl))
     for ii in range(NUsbl):
         Ca[ii,ii*2]=-dy/(r**2)
         Ca[ii,ii*2+1]=dx/(r**2)
-    vara = (1*pi/180.0)**2
 
     # DVL and Hdg
     No = 2*(NUsbl-1)
@@ -46,11 +57,8 @@ for II in range(len(TT)):
     C1 = hstack((zeros((No,2)),eye(No)))
     C2 = hstack((-1*eye(No),zeros((No,2))))
     Co = C1+C2
-    varv = (0.01)**2   # velocity variance
-    vel = 1  # velocity
     ddist = dtUsbl*vel
     varox = varv*dtUsbl
-    varhdg = (10*pi/180.0)**2  # heading variance
     varoy = varv*dtUsbl+varhdg*ddist
     ro = zeros(No)
     for ii in range(NUsbl-1):
@@ -89,4 +97,11 @@ plot(TT,tsig,label='sqrtss')
 plot(TT,Cep,label='CEP')
 legend()
 grid(True)
+
+
+figure(2)
+plot(TT[1:],diff(tsig)/tsig[:-1])
+ylabel('Fractional change')
+grid(True)
+
 show()
