@@ -1,0 +1,31 @@
+
+
+# SBL + DVL/Model + Heading
+
+D = 1000;  # Track length [m]
+# Assume 10 second update rate - that means every 2 meters
+Nstations = 500;
+#Nstations = 3
+Nusbl = Nstations-1;  # Number of USBL fixes
+vel = 0.2;  # vehicle speed in m/s
+
+# SBL Uncertaint
+sig_r = 0.01;  # 1 sigma in range [m]
+# DVL Uncertainty
+sig_v = 0.003;  # velocity [m/s]
+# Heading 
+sig_h = 0.1*pi/180;  # heading [rad]
+
+# Interstitial
+dX = D/Nusbl;
+dT = dX/vel;
+
+def CmatrixSbl(DistList):
+    '''
+    Build a C matrix for standalone SBL
+    DistList is the list of distances along the line
+    Assumes motion along the X axis
+    '''
+    Nobs = len(DistList)
+    return eye(2*Nobs)
+

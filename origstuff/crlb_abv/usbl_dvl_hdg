@@ -1,0 +1,20 @@
+% USBL + DVL + Heading
+
+% Assume path is straight line along the X-axis
+
+% Setup
+D = 1000;  % Track length [m]
+Nusbl = 3;  % Number of USBL fixes
+vel = 0.2;  % vehicle speed in m/s
+% USBL Uncertaint
+sig_r = 0.2;  % 1 sigma in range [m]
+sig_b = 0.25*pi/180;  % 1 sigma in bearing [rad]
+% DVL Uncertainty
+sig_v = 0.003;  % velocity [m/s]
+% Heading 
+sig_h = 1.0*pi/180;  % heading [rad]
+
+
+dX = D/Nusbl;
+dT = dX/vel;
+
