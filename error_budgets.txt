@@ -13,7 +13,7 @@ USBL
     - 0.5 deg (SWAG)
 - Range
   - Acoustic timing 0.01
-  - Speed of sound 0.02 m/s
+  - Speed of sound 1 m/s - 0.13 m
 
 DVL
 - Velocity:  0.3 cm/s, RDI
