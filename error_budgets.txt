@@ -1,0 +1,29 @@
+
+
+USBL
+- Angular
+  - Array bearing 0.1 deg. (EvoLogistics)
+    - 0.143 deg. (Subsonus)
+  - AHRS attitude 
+    - 0.6 deg Adv. Nav. Orientus, dynamic
+    - 1 deg (ocean server)
+  - Heading
+    - 1 deg.
+  - Calibration/offset
+    - 0.5 deg (SWAG)
+- Range
+  - Acoustic timing 0.01
+  - Speed of sound 0.02 m/s
+
+DVL
+- Velocity:  0.3 cm/s, RDI
+
+Heading/Orientation
+- Magnetic, dynamic 1 deg, Adv. Nav. Orientus
+- Calibration/Offset
+  - 0.5 deg (swag)
+
+LBL
+- Range
+  - Acoustic timing 0.1 m
+  - Speed of sound 0.02 m/s

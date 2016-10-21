@@ -4,7 +4,7 @@ reload(cu)
 
 
 # Position
-XX = linspace(1,100,10)
+XX = linspace(1,200,10)
 y = 0
 xb = 0
 yb = 0
@@ -12,13 +12,11 @@ yb = 0
 # Parameters
 # USBL
 dtUsbl = 1.0
-varr = (1.0)**2  # USBL range variance
-vara = (1*pi/180.0)**2  # USBL angle variance
-varv = 1000**2  
-varv = (0.01)**2   # velocity variance
+varr = (0.1)**2  # USBL range variance
+vara = (2.24*pi/180.0)**2  # USBL angle variance
+varv = (0.003)**2   # velocity variance
 vel = 1  # vehicle velocity
-varhdg = 10**2  
-varhdg = (10*pi/180.0)**2  # heading variance
+varhdg = (2.0*pi/180.0)**2  # heading variance
 # 
 Cep = []
 Srss = []
@@ -52,14 +50,22 @@ for x in XX:
 
 figure(1)
 clf()
-subplot(211)
-plot(XX,Cep,label='CEP')
+ax=subplot(211)
+plot(XX,Srss,label='SRSS')
 plot(XX,Sigx,label='SigX')
 plot(XX,Sigy,label='SigY')
 title('USBL Standalone: sigR=%.2f m, sigT=%.2f deg'%(sqrt(varr),sqrt(vara)*180.0/pi))
 legend(loc='lower right')
 grid(True)
 ylabel('Uncertainty [m]')
+cu.annoteParams(ax,x,y,
+                 dtUsbl,
+                 varr,
+                 vara,
+                 varv,
+                 vel,
+                 varhdg,
+                loc=(0.01,0.95),odo=False)
 ax = subplot(212)
 for crlb,x in zip(Crlb,XX):
     cu.plotErrEllipse(ax,crlb,ecenter=(x,y))
@@ -70,8 +76,8 @@ show()
 
 figure(2)
 clf()
-subplot(211)
-plot(XX,Cepo,label='CEP')
+ax=subplot(211)
+plot(XX,Srsso,label='SRSS')
 plot(XX,Sigxo,label='SigX')
 plot(XX,Sigyo,label='SigY')
 #plot(XX,No,label='N')
@@ -79,6 +85,14 @@ title('USBL with Odo.: sigR=%.2f m, sigT=%.2f deg'%(sqrt(varr),sqrt(vara)*180.0/
 legend(loc='lower right')
 grid(True)
 ylabel('Uncertainty [m]')
+cu.annoteParams(ax,x,y,
+                 dtUsbl,
+                 varr,
+                 vara,
+                 varv,
+                 vel,
+                 varhdg,
+                loc=(0.01,0.95))
 ax = subplot(212)
 for crlb,x in zip(Crlbo,XX):
     cu.plotErrEllipse(ax,crlb,ecenter=(x,y))
