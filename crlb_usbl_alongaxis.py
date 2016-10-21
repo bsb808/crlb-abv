@@ -12,7 +12,7 @@ yb = 0
 # Parameters
 # USBL
 dtUsbl = 1.0
-varr = (0.1)**2  # USBL range variance
+varr = (0.14)**2  # USBL range variance
 vara = (2.24*pi/180.0)**2  # USBL angle variance
 varv = (0.003)**2   # velocity variance
 vel = 1  # vehicle velocity
