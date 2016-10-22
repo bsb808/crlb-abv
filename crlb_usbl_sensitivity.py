@@ -54,32 +54,36 @@ for kk in sens.keys():
     figure()
     clf()
     subplot(111)
+    nval = osens[kk]
     if kk=='dtUsbl':
         xlabel('USBL: $\delta t$ [s]')
     elif kk=='varr':
         xlabel('USBL: $\sigma_r$ [m]')
         pvec = sqrt(pvec)
+        nval = sqrt(osens[kk])
     elif kk=='vara':
         xlabel('USBL: $\sigma_{\\theta}$ [deg]')
         pvec = sqrt(pvec)*180/pi
+        nval = sqrt(osens[kk])*180/pi
     elif kk=='varv':
         xlabel('DVL: $\sigma_v$ [mm/s]')
         pvec = sqrt(pvec)*1000
+        nval = sqrt(osens[kk])*1000
     elif kk=='varhdg':
         xlabel('DVL: $\sigma_{hdg}$ [deg]')
         pvec = sqrt(pvec)*180/pi
+        nval = sqrt(osens[kk])*180/pi
     elif kk=='vel':
         xlabel('Mobile Velocity [m/s]')
         pvec = pvec
     else:
         xlabel(kk)
         pvec=pvec
+        nval = osens[kk]
     pfun = semilogx  # semilog or just plot?
     pfun(pvec,Srss,label='SRSS')
     pfun(pvec,Sigx,label='SigX')
     pfun(pvec,Sigy,label='SigY')
-    title('Sensitivity: %s'%kk)
-    legend(loc='center right')
     ax = gca()
     cu.annoteParams(ax,x,y,
                  osens['dtUsbl'],
@@ -88,6 +92,13 @@ for kk in sens.keys():
                  osens['varv'],
                  osens['vel'],
                  osens['varhdg'])
+    pfun(nval*array([1,1]),ylim(),'k--',label='Nom. Val.')
+    title('Sensitivity: %s'%kk)
+    legend(loc='center right')
+
+    # vert. line at nominal value
+
+
 
 show()
 
