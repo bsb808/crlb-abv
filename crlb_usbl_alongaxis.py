@@ -4,16 +4,16 @@ reload(cu)
 
 
 # Position
-XX = linspace(1,200,10)
+XX = linspace(1,10,10)
 y = 0
 xb = 0
 yb = 0
 
 # Parameters
 # USBL
-dtUsbl = 1.0
-varr = (0.14)**2  # USBL range variance
-vara = (2.24*pi/180.0)**2  # USBL angle variance
+dtUsbl = 5.0
+varr = (0.3)**2 #(0.14)**2  # USBL range variance
+vara = (2.0*pi/180.0)**2  # USBL angle variance
 varv = (0.003)**2   # velocity variance
 vel = 1  # vehicle velocity
 varhdg = (2.0*pi/180.0)**2  # heading variance
@@ -51,10 +51,11 @@ for x in XX:
 figure(1)
 clf()
 ax=subplot(211)
-plot(XX,Srss,label='SRSS')
-plot(XX,Sigx,label='SigX')
-plot(XX,Sigy,label='SigY')
-title('USBL Standalone: sigR=%.2f m, sigT=%.2f deg'%(sqrt(varr),sqrt(vara)*180.0/pi))
+plot(XX,Srss,label='$\sqrt{\sigma_x^2+\sigma_y^2}$')
+plot(XX,Sigx,label='$\sigma_x$')
+plot(XX,Sigy,label='$\sigma_y$')
+#title('USBL Standalone: $\sigma_{range}$=%.2f m, $\sigma_{angle}$=%.2f deg'%(sqrt(varr),sqrt(vara)*180.0/pi))
+title('USBL Standalone')
 legend(loc='lower right')
 grid(True)
 ylabel('Uncertainty [m]')
@@ -66,7 +67,7 @@ cu.annoteParams(ax,x,y,
                  vel,
                  varhdg,
                 loc=(0.01,0.95),odo=False)
-ax = subplot(212)
+ax = subplot(212,sharex=ax)
 for crlb,x in zip(Crlb,XX):
     cu.plotErrEllipse(ax,crlb,ecenter=(x,y))
 xlabel('Distance [m]')
@@ -77,12 +78,13 @@ show()
 figure(2)
 clf()
 ax=subplot(211)
-plot(XX,Srsso,label='SRSS')
-plot(XX,Sigxo,label='SigX')
-plot(XX,Sigyo,label='SigY')
+plot(XX,Srsso,label='$\sqrt{\sigma_x^2+\sigma_y^2}$')
+plot(XX,Sigxo,label='$\sigma_x$')
+plot(XX,Sigyo,label='$\sigma_y$')
 #plot(XX,No,label='N')
-title('USBL with Odo.: sigR=%.2f m, sigT=%.2f deg'%(sqrt(varr),sqrt(vara)*180.0/pi))
-legend(loc='lower right')
+#title('USBL with DVL: sigR=%.2f m, sigT=%.2f deg'%(sqrt(varr),sqrt(vara)*180.0/pi))
+title('USBL with DVL')
+legend(loc='upper right')
 grid(True)
 ylabel('Uncertainty [m]')
 cu.annoteParams(ax,x,y,
@@ -93,7 +95,7 @@ cu.annoteParams(ax,x,y,
                  vel,
                  varhdg,
                 loc=(0.01,0.95))
-ax = subplot(212)
+ax = subplot(212,sharex=ax)
 for crlb,x in zip(Crlbo,XX):
     cu.plotErrEllipse(ax,crlb,ecenter=(x,y))
 xlabel('Distance [m]')
