@@ -205,8 +205,8 @@ def plotErrEllipse(ax,covm,ecenter=(0,0),chi=4.61):
     '''
 
     d,V = eig(inv(covm))
-    majMag = sqrt(abs(chi/d[1]))
-    minMag = sqrt(abs(chi/d[0]))
+    majMag = 2*sqrt(abs(chi/d[1]))
+    minMag = 2*sqrt(abs(chi/d[0]))
     th = math.atan2(V[1,1],V[0,1])
     e1 = patches.Ellipse(ecenter,width=majMag,height=minMag,angle=th*180.0/pi,linewidth=2,fill=False)
     ax.add_patch(e1)
