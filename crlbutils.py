@@ -217,12 +217,11 @@ def plotErrEllipse(ax,covm,ecenter=(0,0),chi=4.61):
 
 def annoteParams(ax,x,y,dtUsbl,varr,vara,varv,vel,varhdg,loc=(0.1,0.5),usbl=True,odo=True):
     if usbl and odo:
-        textstr = ("x=%.1f m, y=%.1f m \n"
-                   "USBL: $\delta t= %.1f s, \, \sigma_r= %.2f m, \, "
+        textstr = ("USBL: $\delta t= %.1f s, \, \sigma_r= %.2f m, \, "
                    "\sigma_{\\theta}=%.2f deg$ \n"
                    "DVL: $ \sigma_v=%.1f mm/s, \, \sigma_{hdg}=%.2f deg $\n"
                    "vel=%.1f m/s"%
-                   (x,y,dtUsbl,sqrt(varr),sqrt(vara)*180/pi,
+                   (dtUsbl,sqrt(varr),sqrt(vara)*180/pi,
                     sqrt(varv)*1000,sqrt(varhdg)*180/pi,vel))
     elif usbl and (not odo):
         textstr = ("x=%.1f m, y=%.1f m \n"
