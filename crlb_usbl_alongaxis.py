@@ -18,8 +18,8 @@ for L,ll in zip(LL,range(len(LL))):
     # Parameters
     # USBL
     dtUsbl = 5.0
-    varr = (0.3)**2 #(0.14)**2  # USBL range variance
-    vara = (0.3*pi/180.0)**2  # USBL angle variance
+    varr = (0.04)**2 #0.3)**2 #(0.14)**2  # USBL range variance
+    vara = (0.9*pi/180.0)**2  # USBL angle variance
     varv = (0.003)**2   # velocity variance
     vel = 0.5  # vehicle velocity [m/s]
     varhdg = (2.0*pi/180.0)**2  # heading variance
@@ -34,6 +34,7 @@ for L,ll in zip(LL,range(len(LL))):
     Srsso = []
     Sigxo = []
     Sigyo = []
+    CIo = []
     Crlbo = []
     No = []
     for x in XX:
@@ -51,10 +52,13 @@ for L,ll in zip(LL,range(len(LL))):
         Srsso.append(srss)
         Sigxo.append(sqrt(crlb[0,0]))
         Sigyo.append(sqrt(crlb[1,1]))
+        
+        CIo.append(sqrt(5.99*max(crlb[0,0],crlb[1,1])))
+        #CIo.append(sqrt(5.99)*(sqrt(Sigxo[-1]*Sigyo[-1])))
         Crlbo.append(crlb)
         No.append(N)
 
-    figure(1)
+    figure(1+ll)
     ax=subplot(2,1,ll+1)
     plot(XX,Srss,label='$\sqrt{\sigma_x^2+\sigma_y^2}$')
     plot(XX,Sigx,label='$\sigma_x$')
@@ -79,12 +83,13 @@ for L,ll in zip(LL,range(len(LL))):
 
 
     for jj in range(2):
-        figure()
+        figure(30+jj+ll)
         clf()
         if jj > 0:
             ax = subplot(111)
         else:
             ax=subplot(211)
+
         plot(XX,Srss,label='$\sqrt{\sigma_x^2+\sigma_y^2}$')
         plot(XX,Sigx,label='$\sigma_x$')
         plot(XX,Sigy,label='$\sigma_y$')
@@ -112,12 +117,13 @@ for L,ll in zip(LL,range(len(LL))):
                 grid(True)
         xlabel('Along-Track Distance [m]')
 
-        figure()
+        figure(40+ll)
         clf()
         if jj > 0:
             ax=subplot(111)
         else:
             ax=subplot(211)
+        plot(XX,CIo,linewidth=2,label="95% CI")
         plot(XX,Srsso,label='$\sqrt{\sigma_x^2+\sigma_y^2}$')
         plot(XX,Sigxo,label='$\sigma_x$')
         plot(XX,Sigyo,label='$\sigma_y$')
@@ -126,11 +132,12 @@ for L,ll in zip(LL,range(len(LL))):
         title('USBL with DVL')
         if jj > 0:
             #legend(loc='lower right')
-            legend(loc='upper right')
-            ylim([0,max(Srsso)*1.5])
+            legend(loc='lower right')             
+            ylim([0,max(CIo)*1.5])
+
         else:
             legend(loc='upper right')
-            ylim([0,max(Srsso)*2.5])
+            #ylim([0,max(Srsso)*2.5])
         grid(True)
         ylabel('Uncertainty [m]')
         cu.annoteParams(ax,x,y,
@@ -177,24 +184,29 @@ show()
 
 
 
-figure(1)
-savefig('crlb_alongaxis_usblonly_twoscales.png',dpi=300)
-figure(2)
-savefig('crlb_alongaxis_usblonly_subplots_%.0f.png'%LL[0],dpi=300)
-figure(3)
-savefig('crlb_alongaxis_usbldvl_subplots_%.0f.png'%LL[0],dpi=300)
-figure(4)
-savefig('crlb_alongaxis_usblonly_1plot_%.0f.png'%LL[0],dpi=300)
-figure(5)
-savefig('crlb_alongaxis_usbldvl_1plot_%.0f.png'%LL[0],dpi=300)
-figure(20)
-savefig('crlb_alongaxis_usbldvl_twoscales.png',dpi=300)
-figure(21)
-savefig('crlb_alongaxis_usblonly_subplots_%.0f.png'%LL[1],dpi=300)
-figure(22)
-savefig('crlb_alongaxis_usbldvl_subplots_%.0f.png'%LL[1],dpi=300)
-figure(23)
-savefig('crlb_alongaxis_usblonly_1plot_%.0f.png'%LL[1],dpi=300)
-figure(24)
-savefig('crlb_alongaxis_usbldvl_1plot_%.0f.png'%LL[1],dpi=300)
+if False:
+    figure(1)
+    savefig('crlb_alongaxis_usblonly_twoscales.png',dpi=300)
+    figure(2)
+    savefig('crlb_alongaxis_usblonly_subplots_%.0f.png'%LL[0],dpi=300)
+    figure(3)
+    savefig('crlb_alongaxis_usbldvl_subplots_%.0f.png'%LL[0],dpi=300)
+    figure(4)
+    savefig('crlb_alongaxis_usblonly_1plot_%.0f.png'%LL[0],dpi=300)
+    figure(5)
+    savefig('crlb_alongaxis_usbldvl_1plot_%.0f.png'%LL[0],dpi=300)
+    figure(20)
+    savefig('crlb_alongaxis_usbldvl_twoscales.png',dpi=300)
+    figure(21)
+    savefig('crlb_alongaxis_usblonly_subplots_%.0f.png'%LL[1],dpi=300)
+    figure(22)
+    savefig('crlb_alongaxis_usbldvl_subplots_%.0f.png'%LL[1],dpi=300)
+    figure(23)
+    savefig('crlb_alongaxis_usblonly_1plot_%.0f.png'%LL[1],dpi=300)
+    figure(24)
+    savefig('crlb_alongaxis_usbldvl_1plot_%.0f.png'%LL[1],dpi=300)
 
+figure(41)
+savefig('crlb_alongaxis_usbldvl_1plot_%.0f.png'%LL[1],dpi=300)
+figure(40)
+savefig('crlb_alongaxis_usbldvl_1plot_%.0f.png'%LL[0],dpi=300)
