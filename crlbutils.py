@@ -196,6 +196,67 @@ def crlbUsblOdo(T,x,y,xb,yb,dtUsbl,varr,vara,varv,vel,varhdg):
 
     return (crlbxy,cep,srss)
 
+
+def crlbGpsOdo(T,dtGps,varxy,varv,vel,varhdg):
+    '''
+    INPUTS
+    T - Duration of observation window. Number of obs. determined by dtUsbl
+    x,y - location of observations 
+    xb,yb - location of USBL origin
+    dtUsbl - sampling time of USBL
+    varxy - X/Y variance
+    varv - velocity variance
+    vel - mobile velocity
+    varhdg - heading velocity
+    
+    OUTPUTS:
+    CRLBxy - 2x2 array, cov. of x and y
+    CEP - circular error probable
+    SRSS - sqrt sum of sqares for diag of CRLBxy
+    '''
+    # Number of USBL measurement
+    NGps = int(floor(T/dtGps))
+    Ns = 2*NGps     # number of states
+    # GPS Range measurements
+    Cr = eye(NGps*2)
+
+    # DVL and Hdg
+    No = 2*(NGps-1)  # number of odo. observations
+    #Co = zeros((NUsbl-1,2*NAsbl))
+    C1 = hstack((zeros((No,2)),eye(No)))
+    C2 = hstack((-1*eye(No),zeros((No,2))))
+    Co = C1+C2
+    ddist = dtGps*vel
+    varox = varv*dtGps*dtGps+varhdg*ddist
+    varoy = varox
+    #varoy = varv*dtGps
+    ro = zeros(No)
+    for ii in range(NGps-1):
+        ro[ii*2]=varox
+        ro[ii*2+1]=varoy
+
+    # Combine
+    C = vstack((Cr,Co))
+    R = diag(hstack((ones(2*NGps)*varxy,
+                     ro)))
+    
+    #crlb = inv(diag(diag((dot(dot(C.T,inv(R)),C)))))
+    crlb = inv(dot(dot(C.T,inv(R)),C))
+
+    # Extract middle of the cov. matrix
+    NN = crlb.shape[0]/2
+    if NGps%2:  # odd
+        ll = NGps-1
+    else:
+        ll = NGps-2
+    
+    # metrics
+    crlbxy = crlb[ll:ll+2,ll:ll+2]
+    cep = sum(sqrt(eigvals(crlbxy)))*0.59
+    srss = sqrt(sum(diag(crlbxy)))
+
+    return (crlbxy,cep,srss)
+
 def plotErrEllipse(ax,covm,ecenter=(0,0),chi=4.61):
     '''
     Chi-square distribution for 2 dof
