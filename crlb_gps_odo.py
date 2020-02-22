@@ -50,6 +50,7 @@ for V,L in zip(VV,Labels):
     plot(NN,Cepo/max(Cepo),label=L)
     grid(True)
 
-ylabel(r'$\overline{\mathrm{CEP}}$')
+ylabel(r'$\overline{\mathrm{CEP}}$ [dimenstionless]')
+xlabel('Position Updates [N]')
 legend()
 show()
